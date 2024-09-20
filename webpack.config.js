@@ -127,6 +127,24 @@ var options = {
     ],
   },
   resolve: {
+    // fallback: {
+    //   url: require.resolve('url'),
+    //   assert: require.resolve('assert'),
+    //   crypto: require.resolve('crypto-browserify'),
+    //   http: require.resolve('stream-http'),
+    //   https: require.resolve('https-browserify'),
+    //   buffer: require.resolve('buffer'),
+    //   stream: require.resolve('stream-browserify'),
+    //   vm: require.resolve('vm-browserify'),
+    // },
+    fallback: {
+      crypto: require.resolve('crypto-browserify'),
+      stream: require.resolve('stream-browserify'),
+      vm: require.resolve('vm-browserify'),
+      buffer: require.resolve('buffer'),
+      http: require.resolve('stream-http'),
+      https: require.resolve('https-browserify'),
+    },
     alias: alias,
     extensions: fileExtensions
       .map((extension) => '.' + extension)
@@ -135,6 +153,10 @@ var options = {
   plugins: [
     isDevelopment && new ReactRefreshWebpackPlugin(),
     new CleanWebpackPlugin({ verbose: false }),
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+      Buffer: ['buffer', 'Buffer'],
+    }),
     new webpack.ProgressPlugin(),
     // expose and write the allowed env vars on the compiled bundle
     new webpack.EnvironmentPlugin(['NODE_ENV']),

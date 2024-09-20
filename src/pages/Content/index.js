@@ -7,9 +7,18 @@ printLine("Using the 'printLine' function from the Print Module");
 const makeid = () => {
   return Math.floor(Math.random() * 100000000);
 };
+const getSigner = () => {
+  return new Promise((resolve, reject) => {
+    chrome.storage.sync.get(['signer'], (result) => {
+      if (chrome.runtime.lastError) {
+        return reject(chrome.runtime.lastError);
+      }
+      resolve(result.signer);
+    });
+  });
+};
 const handleSend = async () => {
-  const signer =
-    '0c789775573e69bc68ab1e6db8db47a5ab6a174463cf4dbc3aa4d418efb5e441';
+  const signer = await getSigner();
 
   const joinTeamTransaction = {
     to: '0xEb53aED2ad03a20489926dCcA07f5a0CDa553522',
